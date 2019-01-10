@@ -1,6 +1,23 @@
 # reactive-tasks
 Super tiny reactive task completion library. An experiment built in about 5 hours.
 
+The idea here was to create a super simple way to execute arbitrary bits of code when a condition is fulfilled. Sort of a _when this is true do this_, closer to a declarative paradigm, using a promise-like syntax stripped of its complexity.
+
+So for example you can do something like: 
+
+```javascript 
+let milks = 0;
+const hasMilk = () => milks > 0;
+
+const task1 = rt.addTask("GetMilk");
+
+task1.when(hasMilk).do(() => {
+	console.log("Got Milk!")
+});
+```
+
+It also handles multiple dependencies/conditions, and tasks can be used as conditions for other tasks. See example.html for an example.
+
 
 ## Usage:
 
@@ -23,15 +40,4 @@ Super tiny reactive task completion library. An experiment built in about 5 hour
 		when task is complete, adds the .completed class to dom elements specified by a selector
 
 
-## Example:
 
-```javascript 
-let milks = 0;
-const hasMilk = () => milks > 0;
-
-const task1 = rt.addTask("GetMilk");
-
-task1.when(hasMilk).do(() => {
-	console.log("Got Milk!")
-});
-```

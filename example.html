@@ -27,13 +27,16 @@
 <body>
     <code>
         let milks = 0;
-        let hasDrunkMilk = false;
+        const consumed = [];
     </code>
     <h2>Tasks</h2>
-    <h3 id="#today">Today</h3>
     <ul>
-        <li id="task1">Get milk: Open the console and set the variable 'milks' to a value greater than 0.</li>
-        <li id="task2">Drink milk: In the console, set the variable hasDrunkMilk to true.</li>
+        <li id="parent-task">Strengthen bones
+            <ul>
+                <li id="task1">Get milk: Open the console and set the variable 'milks' to a value greater than 0.</li>
+                <li id="task2">Drink milk: In the console, call consumeMilk() (or push  the string 'milk' to the consumed array).</li>
+            </ul>
+        </li>
     </ul>
     <p></p>
     <p>For example:</p>
@@ -41,19 +44,25 @@
 <script>
 
     let milks = 0;
-    let hasDrunkMilk = false;
+    const consumed = [];
     const hasMilk = () => milks > 0;
-    const drankMilk = () => hasDrunkMilk === true;
+    const drankMilk = () => consumed.includes('milk');
+    const consume = item => consumed.push(item);
+    const consumeMilk = () => {
+        if (hasMilk()) {
+            consume('milk');
+        }
+    }
 
     var task1 = rt.addTask("GetMilk");
     var task2 = rt.addTask("DrinkMilk");
-    rt.addTask("today");
+    rt.addTask("StrongBones");
 
     task1.when(hasMilk).do(() => {
         console.log("Got Milk!")
     }).$complete("#task1");
     task2.when(drankMilk).$complete("#task2");
-    rt.getTask("today").when("GetMilk", "DrinkMilk").$complete("#today");
+    rt.getTask("StrongBones").when("GetMilk", "DrinkMilk").$complete("#parent-task");
 
 </script>
 </body>

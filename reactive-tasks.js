@@ -152,12 +152,14 @@ var rt = (function ReactiveTasks() {
         let checkDependencies = () => {
             if (!this.isComplete()) {
 
-                dependencyFns.forEach((fn, index, object) => {
-                    if (fn()) {
+                dependencyFns.forEach((dependency, index, object) => {
+                    // evaluate condition
+                    if (dependency() === true) {
                         // remove the function from dependencyFns
                         object.splice(index, 1);
                     }
                 });
+                // we're removed all the dependencyFns, so all conditions are satisfied
                 if (dependencyFns.length == 0) {
 
                     completeSubs.forEach(function (fn) {
