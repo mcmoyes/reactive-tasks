@@ -1,0 +1,60 @@
+<html>
+<head>
+    <script src="./reactive-tasks.js"></script>
+    <style>
+        .completed {
+            text-decoration: line-through;
+            animation: highlight 1s;
+        }
+        code {
+            background:#eee;
+            padding:10px;
+        }
+        @keyframes highlight {
+            0% {
+                background-color:white;
+            }
+            50% {
+                background-color:yellow;
+            }
+            100% {
+                background-color:white;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <code>
+        let milks = 0;
+        let hasDrunkMilk = false;
+    </code>
+    <h2>Tasks</h2>
+    <h3 id="#today">Today</h3>
+    <ul>
+        <li id="task1">Get milk: Open the console and set the variable 'milks' to a value greater than 0.</li>
+        <li id="task2">Drink milk: In the console, set the variable hasDrunkMilk to true.</li>
+    </ul>
+    <p></p>
+    <p>For example:</p>
+    <code>milks = 5</code>
+<script>
+
+    let milks = 0;
+    let hasDrunkMilk = false;
+    const hasMilk = () => milks > 0;
+    const drankMilk = () => hasDrunkMilk === true;
+
+    var task1 = rt.addTask("GetMilk");
+    var task2 = rt.addTask("DrinkMilk");
+    rt.addTask("today");
+
+    task1.when(hasMilk).do(() => {
+        console.log("Got Milk!")
+    }).$complete("#task1");
+    task2.when(drankMilk).$complete("#task2");
+    rt.getTask("today").when("GetMilk", "DrinkMilk").$complete("#today");
+
+</script>
+</body>
+</html>
