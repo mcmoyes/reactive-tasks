@@ -2,9 +2,29 @@
 <head>
     <script src="./reactive-tasks.js"></script>
     <style>
-        .completed {
+        body {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fafafa;
+        }
+        h3 {
+            background-color:#eee;
+        }
+        ul.tasklist {
+            padding: 0px;
+            border: 1px solid #ddd;
+            background: #fefefe;
+            max-width: 400px;
+            box-shadow: 2px 2px 2px rgba(0,0,0,.1);
+        }
+        .task {
+            padding: 10px 10px;
+            border-top: 1px solid #ccc;
+            margin: 0;
+        }
+        .task.completed {
             text-decoration: line-through;
-            animation: highlight 1s;
+            animation: highlight .5s forwards;
+            
         }
         code {
             background:#eee;
@@ -12,13 +32,19 @@
         }
         @keyframes highlight {
             0% {
-                background-color:white;
+                background-color:rgba(255,230,0,0);
+                opacity:1;
+                padding:10px 10px;
             }
             50% {
-                background-color:yellow;
+                background-color:rgba(255, 230, 0, .5);
+                opacity:1;
+                padding: 12px 10px;
             }
             100% {
-                background-color:white;
+                background-color:rgba(255,230,0,0);
+                opacity:.4;
+                padding:5px 10px;
             }
 
         }
@@ -26,16 +52,16 @@
 </head>
 <body>
     <code>
-        let milks = 0;
-        const consumed = [];
+    let milks = 0;
+    let butters = 0;
     </code>
     <h2>Tasks</h2>
-    <ul>
-        <li id="parent-task">Strengthen bones
-            <ul>
-                <li id="task1">Get milk: Open the console and set the variable 'milks' to a value greater than 0.</li>
-                <li id="task2">Drink milk: In the console, call consumeMilk() (or push  the string 'milk' to the consumed array).</li>
-            </ul>
+    <ul class="tasklist">
+        <h3 class="task" id="task1">Replace margarine</h3>
+
+                <li class="task task--child" id="task1-1">Get milk: Open the console and set the variable 'milks' to a value greater than 0.</li>
+                <li class="task task--child" id="task1-2">Get butter. (Call churnMilk(), or cheat and set butters to >0.)</li>
+
         </li>
     </ul>
     <p></p>
@@ -44,25 +70,29 @@
 <script>
 
     let milks = 0;
-    const consumed = [];
+    let butters = 0;
+
     const hasMilk = () => milks > 0;
-    const drankMilk = () => consumed.includes('milk');
-    const consume = item => consumed.push(item);
-    const consumeMilk = () => {
+    const hasButter = () => butters > 0;
+
+    const churnMilk = () => {
         if (hasMilk()) {
-            consume('milk');
+            milks -= 1;
+            butters += 1;
+        } else {
+            console.log("Need milk!");
         }
     }
 
     var task1 = rt.addTask("GetMilk");
-    var task2 = rt.addTask("DrinkMilk");
-    rt.addTask("StrongBones");
+    var task2 = rt.addTask("ChurnButter");
+    rt.addTask("ReplaceMargarine");
 
     task1.when(hasMilk).do(() => {
         console.log("Got Milk!")
-    }).$complete("#task1");
-    task2.when(drankMilk).$complete("#task2");
-    rt.getTask("StrongBones").when("GetMilk", "DrinkMilk").$complete("#parent-task");
+    }).$complete("#task1-1");
+    task2.when(hasButter).$complete("#task1-2");
+    rt.getTask("ReplaceMargarine").when("GetMilk", "ChurnButter").$complete("#task1");
 
 </script>
 </body>
